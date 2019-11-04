@@ -17,16 +17,16 @@ ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 
 # Download and install Anaconda Python
-ADD http://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh /tmp/Anaconda3-4.2.0-Linux-x86_64.sh
-RUN bash /tmp/Anaconda3-4.2.0-Linux-x86_64.sh -b -p /root/anaconda
+ADD http://repo.continuum.io/archive/Anaconda3-2019.10-Linux-x86_64.sh /tmp/Anaconda3-2019.10-Linux-x86_64.sh
+RUN bash /tmp/Anaconda3-2019.10-Linux-x86_64.sh -b -p /root/anaconda
 ENV PATH="/root/anaconda/bin:$PATH"
 
 #
 # Install git, clone repo, install Python dependencies
 #
 RUN git clone https://github.com/savanevamara/data
-WORKDIR /root/Agile_Data_Code_2
-ENV PROJECT_HOME=/Agile_Data_Code_2
+WORKDIR /root/datalab
+ENV PROJECT_HOME=/datalab
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 WORKDIR /root
@@ -45,9 +45,9 @@ ENV HADOOP_CONF_DIR=/root/hadoop/etc/hadoop
 #
 # Install Spark: may need to update this link... see http://spark.apache.org/downloads.html
 #
-ADD http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-without-hadoop.tgz /tmp/spark-2.1.0-bin-without-hadoop.tgz
+ADD http://apache.crihan.fr/dist/spark/spark-2.4.4/spark-2.4.4-bin-without-hadoop.tgz /tmp/spark-2.4.4-bin-without-hadoop.tgz
 RUN mkdir -p /root/spark && \
-    tar -xvf /tmp/spark-2.1.0-bin-without-hadoop.tgz -C spark --strip-components=1
+    tar -xvf /tmp/spark-2.4.4-bin-without-hadoop.tgz -C spark --strip-components=1
 ENV SPARK_HOME=/root/spark
 ENV HADOOP_CONF_DIR=/root/hadoop/etc/hadoop/
 ENV SPARK_DIST_CLASSPATH=/root/hadoop/etc/hadoop/:/root/hadoop/share/hadoop/common/lib/*:/root/hadoop/share/hadoop/common/*:/root/hadoop/share/hadoop/hdfs:/root/hadoop/share/hadoop/hdfs/lib/*:/root/hadoop/share/hadoop/hdfs/*:/root/hadoop/share/hadoop/yarn/lib/*:/root/hadoop/share/hadoop/yarn/*:/root/hadoop/share/hadoop/mapreduce/lib/*:/root/hadoop/share/hadoop/mapreduce/*:/root/hadoop/etc/hadoop:/root/hadoop/share/hadoop/common/lib/*:/root/hadoop/share/hadoop/common/*:/root/hadoop/share/hadoop/hdfs:/root/hadoop/share/hadoop/hdfs/lib/*:/root/hadoop/share/hadoop/hdfs/*:/root/hadoop/share/hadoop/yarn/lib/*:/root/hadoop/share/hadoop/yarn/*:/root/hadoop/share/hadoop/mapreduce/lib/*:/root/hadoop/share/hadoop/mapreduce/*:/root/hadoop/contrib/capacity-scheduler/*.jar:/root/hadoop/contrib/capacity-scheduler/*.jar
@@ -172,7 +172,7 @@ RUN cp /root/zeppelin/conf/zeppelin-env.sh.template /root/zeppelin/conf/zeppelin
 #
 # Download the data
 #
-WORKDIR /root/Agile_Data_Code_2/data
+WORKDIR /root/datalab/data
 
 # On-time performance records
 ADD http://s3.amazonaws.com/agile_data_science/On_Time_On_Time_Performance_2015.csv.gz /root/Agile_Data_Code_2/data/On_Time_On_Time_Performance_2015.csv.gz
