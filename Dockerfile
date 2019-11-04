@@ -77,8 +77,8 @@ RUN apt-get update && \
 RUN /usr/bin/mongod --fork --logpath /var/log/mongodb.log
 
 # Get the MongoDB Java Driver and put it in Agile_Data_Code_2
-ADD http://central.maven.org/maven2/org/mongodb/mongo-java-driver/3.4.0/mongo-java-driver-3.4.0.jar /tmp/mongo-java-driver-3.4.0.jar
-RUN mv /tmp/mongo-java-driver-3.4.0.jar /root/Agile_Data_Code_2/lib/
+ADD http://central.maven.org/maven2/org/mongodb/mongo-java-driver/3.9.1/mongo-java-driver-3.9.1.jar /tmp/mongo-java-driver-3.9.1.jar
+RUN mv /tmp/mongo-java-driver-3.9.1.jar /root/datalab/lib/
 
 # Install the mongo-hadoop project in the mongo-hadoop directory in the root of our project.
 ADD https://github.com/mongodb/mongo-hadoop/archive/r1.5.2.tar.gz /tmp/mongo-hadoop-r1.5.2.tar.gz
@@ -88,15 +88,15 @@ RUN mkdir -p /root/mongo-hadoop && \
 WORKDIR /root/mongo-hadoop
 RUN /root/mongo-hadoop/gradlew jar
 WORKDIR /root
-RUN cp /root/mongo-hadoop/spark/build/libs/mongo-hadoop-spark-*.jar /root/Agile_Data_Code_2/lib/ && \
-    cp /root/mongo-hadoop/build/libs/mongo-hadoop-*.jar /root/Agile_Data_Code_2/lib/
+RUN cp /root/mongo-hadoop/spark/build/libs/mongo-hadoop-spark-*.jar /root/datalab/lib/ && \
+    cp /root/mongo-hadoop/build/libs/mongo-hadoop-*.jar /root/datalab/lib/
 
 # Install pymongo_spark
 WORKDIR /root/mongo-hadoop/spark/src/main/python
 RUN python setup.py install
 WORKDIR /root
-RUN cp /root/mongo-hadoop/spark/src/main/python/pymongo_spark.py /root/Agile_Data_Code_2/lib/
-ENV PYTHONPATH=$PYTHONPATH:/root/Agile_Data_Code_2/lib
+RUN cp /root/mongo-hadoop/spark/src/main/python/pymongo_spark.py /root/datalab/lib/
+ENV PYTHONPATH=$PYTHONPATH:/root/datalab/lib
 
 # Cleanup mongo-hadoop
 RUN rm -rf /root/mongo-hadoop
@@ -114,8 +114,8 @@ RUN mkdir /root/elasticsearch && \
 ADD http://download.elastic.co/hadoop/elasticsearch-hadoop-5.1.1.zip /tmp/elasticsearch-hadoop-5.1.1.zip
 RUN unzip /tmp/elasticsearch-hadoop-5.1.1.zip && \
     mv /root/elasticsearch-hadoop-5.1.1 /root/elasticsearch-hadoop && \
-    cp /root/elasticsearch-hadoop/dist/elasticsearch-hadoop-5.1.1.jar /root/Agile_Data_Code_2/lib/ && \
-    cp /root/elasticsearch-hadoop/dist/elasticsearch-spark-20_2.10-5.1.1.jar /root/Agile_Data_Code_2/lib/ && \
+    cp /root/elasticsearch-hadoop/dist/elasticsearch-hadoop-5.1.1.jar /root/datalab/lib/ && \
+    cp /root/elasticsearch-hadoop/dist/elasticsearch-spark-20_2.10-5.1.1.jar /root/datalab/lib/ && \
     echo "spark.speculation false" >> /root/spark/conf/spark-defaults.conf && \
     rm -f /tmp/elasticsearch-hadoop-5.1.1.zip && \
     rm -rf /root/elasticsearch-hadoop
@@ -127,7 +127,7 @@ RUN mv /tmp/snappy-java-1.1.2.6.jar /root/Agile_Data_Code_2/lib/ && \
     mv /tmp/lzo-hadoop-1.0.5.jar /root/Agile_Data_Code_2/lib/
 
 # Setup mongo and elasticsearch jars for Spark
-RUN echo "spark.jars /root/Agile_Data_Code_2/lib/mongo-hadoop-spark-1.5.2.jar,/root/Agile_Data_Code_2/lib/mongo-java-driver-3.4.0.jar,/root/Agile_Data_Code_2/lib/mongo-hadoop-1.5.2.jar,/root/Agile_Data_Code_2/lib/elasticsearch-spark-20_2.10-5.1.1.jar,/root/Agile_Data_Code_2/lib/snappy-java-1.1.2.6.jar,/root/Agile_Data_Code_2/lib/lzo-hadoop-1.0.5.jar" >> /root/spark/conf/spark-defaults.conf
+RUN echo "spark.jars /root/datalab/lib/mongo-hadoop-spark-1.5.2.jar,/root/datalab/lib/mongo-java-driver-3.4.0.jar,/root/Agile_Data_Code_2/lib/mongo-hadoop-1.5.2.jar,/root/Agile_Data_Code_2/lib/elasticsearch-spark-20_2.10-5.1.1.jar,/root/Agile_Data_Code_2/lib/snappy-java-1.1.2.6.jar,/root/Agile_Data_Code_2/lib/lzo-hadoop-1.0.5.jar" >> /root/spark/conf/spark-defaults.conf
 
 #
 # Install and setup Kafka
@@ -175,20 +175,20 @@ RUN cp /root/zeppelin/conf/zeppelin-env.sh.template /root/zeppelin/conf/zeppelin
 WORKDIR /root/datalab/data
 
 # On-time performance records
-ADD http://s3.amazonaws.com/agile_data_science/On_Time_On_Time_Performance_2015.csv.gz /root/Agile_Data_Code_2/data/On_Time_On_Time_Performance_2015.csv.gz
+ADD https://github.com/savanevamara/data/On_Time_On_Time_Performance_2015.csv.gz /root/datalab/data/On_Time_On_Time_Performance_2015.csv.gz
 
 # Openflights data
-ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat /root/Agile_Data_Code_2/data/airports.dat
-ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat /root/Agile_Data_Code_2/data/airlines.dat
-ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat /root/Agile_Data_Code_2/data/routes.dat
-ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/countries.dat /root/Agile_Data_Code_2/data/countries.dat
+ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat /root/datalab/data/airports.dat
+ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat /root/datalab/data/airlines.dat
+ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat /root/datalab/data/routes.dat
+ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/countries.dat /root/datalab/data/countries.dat
 
 # FAA data
-ADD http://av-info.faa.gov/data/ACRef/tab/aircraft.txt /root/Agile_Data_Code_2/data/aircraft.txt
-ADD http://av-info.faa.gov/data/ACRef/tab/ata.txt /root/Agile_Data_Code_2/data/ata.txt
-ADD http://av-info.faa.gov/data/ACRef/tab/compt.txt /root/Agile_Data_Code_2/data/compt.txt
-ADD http://av-info.faa.gov/data/ACRef/tab/engine.txt /root/Agile_Data_Code_2/data/engine.txt
-ADD http://av-info.faa.gov/data/ACRef/tab/prop.txt /root/Agile_Data_Code_2/data/prop.txt
+ADD http://av-info.faa.gov/data/ACRef/tab/aircraft.txt /root/datalab/data/aircraft.txt
+ADD http://av-info.faa.gov/data/ACRef/tab/ata.txt /root/datalab/data/ata.txt
+ADD http://av-info.faa.gov/data/ACRef/tab/compt.txt /root/datalab/data/compt.txt
+ADD http://av-info.faa.gov/data/ACRef/tab/engine.txt /root/datalab/data/engine.txt
+ADD http://av-info.faa.gov/data/ACRef/tab/prop.txt /root/datalab/data/prop.txt
 
 # WBAN Master List
 ADD http://www.ncdc.noaa.gov/homr/file/wbanmasterlist.psv.zip /tmp/wbanmasterlist.psv.zip
