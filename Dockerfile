@@ -175,7 +175,7 @@ RUN cp /root/zeppelin/conf/zeppelin-env.sh.template /root/zeppelin/conf/zeppelin
 WORKDIR /root/datalab/data
 
 # On-time performance records
-ADD https://github.com/savanevamara/data/On_Time_On_Time_Performance_2015.csv.gz /root/datalab/data/On_Time_On_Time_Performance_2015.csv.gz
+ADD http://s3.amazonaws.com/agile_data_science/On_Time_On_Time_Performance_2015.csv.gz /root/datalab/data/On_Time_On_Time_Performance_2015.csv.gz
 
 # Openflights data
 ADD https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat /root/datalab/data/airports.dat
