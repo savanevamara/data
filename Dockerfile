@@ -158,10 +158,10 @@ RUN pip install airflow && \
 # Install and setup Zeppelin
 #
 WORKDIR /root
-ADD http://www-us.apache.org/dist/zeppelin/zeppelin-0.6.2/zeppelin-0.6.2-bin-all.tgz /tmp/zeppelin-0.6.2-bin-all.tgz
+ADD http://mirror.ibcp.fr/pub/apache/zeppelin/zeppelin-0.8.1/zeppelin-0.8.1-bin-all.tgz /tmp/zeppelin-0.8.1-bin-all.tgz
 RUN mkdir -p /root/zeppelin && \
-    tar -xvzf /tmp/zeppelin-0.6.2-bin-all.tgz -C zeppelin --strip-components=1 && \
-    rm -f /tmp/zeppelin-0.6.2-bin-all.tgz
+    tar -xvzf /tmp/zeppelin-0.8.1-bin-all.tgz -C zeppelin --strip-components=1 && \
+    rm -f /tmp/zeppelin-0.8.1-bin-all.tgz
 
 # Configure Zeppelin
 RUN cp /root/zeppelin/conf/zeppelin-env.sh.template /root/zeppelin/conf/zeppelin-env.sh && \
