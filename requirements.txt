@@ -1,5 +1,5 @@
 flask
-apache-airflow==1.10.6
+apache-airflow==2.3.4
 beautifulsoup4 
 bs4
 frozendict
